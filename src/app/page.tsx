@@ -1,7 +1,7 @@
 "use client";
 import { useUser } from "@/providers/authProvider";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function Home() {
   const { user } = useUser();

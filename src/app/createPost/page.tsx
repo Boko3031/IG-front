@@ -18,7 +18,7 @@ const CreatePost = () => {
         <div className=" flex flex-col w-[150px]">
           <Button className="bg-blue-500">Photo library</Button>
           <Button variant="ghost" onClick={GenerateAI}>
-            Generate with AI{" "}
+            Generate with AI
           </Button>
         </div>
       </div>
