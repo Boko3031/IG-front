@@ -65,7 +65,7 @@ export default function Home() {
             Log In
           </Button>
         </div>
-        <div>Don't have an account? Sign Up</div>
+        <div>Don not have an account? Sign Up</div>
       </div>
     </div>
   );

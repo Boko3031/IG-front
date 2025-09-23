@@ -61,7 +61,7 @@ const Generate = () => {
           Explore AI generated
         </div>
         <div className="text-lg text-muted-foreground">
-          images Describe what's on your mind. For best results, be specific
+          images Describe what is on your mind. For best results, be specific
         </div>
       </div>
       <div>
