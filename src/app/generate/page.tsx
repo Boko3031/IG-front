@@ -45,7 +45,7 @@ const Generate = () => {
       const blob = await response.blob();
       const URLIMG = URL.createObjectURL(blob);
       setImageUrl(URLIMG);
-    } catch (err) {
+    } catch (error) {
       setIsLoading(false);
     }
   };

@@ -8,9 +8,6 @@ const CreatePost = () => {
   const GenerateAI = () => {
     push("/generate");
   };
-  const back = () => {
-    push("/");
-  };
   return (
     <div>
       <BUTTON />
