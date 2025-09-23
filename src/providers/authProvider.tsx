@@ -11,9 +11,9 @@ import {
   Dispatch,
 } from "react";
 type user = {
-  userName: String;
-  password: String;
-  email: String;
+  userName: string;
+  password: string;
+  email: string;
 };
 type ContextType = {
   user: user | null;
