@@ -40,16 +40,16 @@ export default function Home() {
     if (user) push("/");
   }, []);
   return (
-    <div className="w-full h-full">
-      <div className="flex-col justify-center items-center   w-[430px] h-[932px]">
+    <div className="flex justify-center ">
+      <div className="flex flex-col justify-between  gap-4  ">
         <div
           style={{ backgroundImage: `url('ig.svg')` }}
           className="w-[48px] h-[48px] bg-center shadow-2xl"
         ></div>
-        <div className="">
+        <div className="text-gray-400">
           Sign up to see photos and videos from your friends
         </div>
-        <div className="w-[270px]">
+        <div className="w-[270px]  flex flex-col gap-2  ">
           <Input
             placeholder="email"
             name="email"
@@ -75,9 +75,21 @@ export default function Home() {
               handleInput(e);
             }}
           />
-          <Button onClick={addSignUp}>Sign up</Button>
+          <Button className="w-[270px] bg-blue-500" onClick={addSignUp}>
+            Sign up
+          </Button>
         </div>
-        <div>Have an account? Log In</div>
+        <div className="flex">
+          Have an account?
+          <div
+            className="text-blue-500"
+            onClick={() => {
+              push("/login");
+            }}
+          >
+            Log In
+          </div>
+        </div>
       </div>
     </div>
   );

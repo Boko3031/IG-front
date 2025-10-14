@@ -1,6 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+
+import { jwtDecode } from "jwt-decode";
+
 import {
   createContext,
   PropsWithChildren,
@@ -11,29 +14,32 @@ import {
   Dispatch,
 } from "react";
 type user = {
+  _id: string;
   userName: string;
   password: string;
   email: string;
+  followers: string[];
+  following: string[];
+  bio: string;
 };
 type ContextType = {
   user: user | null;
   login: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, userName: string) => Promise<void>;
   setUser: Dispatch<SetStateAction<user | null>>;
+  token: string | null;
+};
+type decodedType = {
+  data: user;
 };
 export const autoContext = createContext<ContextType | null>(null);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<user | null>(null);
+  const [token, setToken] = useState<string | null>(null);
 
   const { push } = useRouter();
 
-  useEffect(() => {
-    const userItem = localStorage.getItem("user");
-    if (userItem) {
-      setUser(JSON.parse(userItem));
-    }
-  }, []);
   const login = async (email: string, password: string) => {
     const response = await fetch("http://localhost:8080/login", {
       method: "POST",
@@ -44,9 +50,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       }),
     });
     if (response.ok) {
-      const user = await response.json();
-      setUser(user);
-      localStorage.setItem("user", JSON.stringify(user));
+      const token = await response.json();
+      localStorage.setItem("token", token);
+      setToken(token);
+      const decodedToken: decodedType = jwtDecode(token);
+      setUser(decodedToken.data);
+      // setUser(user);
       console.log("login working");
       push("/");
       toast.success("amjilttai nevterlee", { richColors: true });
@@ -66,9 +75,11 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       }),
     });
     if (response.ok) {
-      const userSignUp = await response.json();
-      setUser(userSignUp);
-      localStorage.setItem("user", JSON.stringify(userSignUp));
+      const token = await response.json();
+      localStorage.setItem("token", token);
+      const decodedToken: decodedType = jwtDecode(token);
+      setUser(decodedToken.data);
+      setToken(token);
       console.log("signUp working");
       push("/");
       toast.success("shine hereglegch nevterlee", { richColors: true });
@@ -79,11 +90,22 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
+  useEffect(() => {
+    // const userItem = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if (token && typeof window !== "undefined") {
+      const decodedToken: decodedType = jwtDecode(token);
+      setUser(decodedToken.data);
+      setToken(token);
+    }
+  }, []);
+
   const values = {
     login: login,
     signUp: signUp,
     user: user,
     setUser: setUser,
+    token: token,
   };
   return <autoContext.Provider value={values}>{children}</autoContext.Provider>;
 };

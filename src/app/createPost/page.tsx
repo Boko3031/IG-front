@@ -10,10 +10,16 @@ const CreatePost = () => {
   };
   return (
     <div>
-      <BUTTON />
+      <div
+        onClick={() => {
+          push("/");
+        }}
+      >
+        <BUTTON />
+      </div>
       <div className="flex justify-center">New photo post</div>
       <hr />
-      <div className="flex flex-col justify-center ">
+      <div className="flex flex-col items-center w-full">
         <ICON />
         <div className=" flex flex-col w-[150px]">
           <Button className="bg-blue-500">Photo library</Button>

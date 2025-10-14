@@ -2,16 +2,26 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BUTTON } from "@/iconFolders/exitButton";
+import { useUser } from "@/providers/authProvider";
+import { upload } from "@vercel/blob/client";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
+import { toast } from "sonner";
 
 const Generate = () => {
   const [prompt, setPrompt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const HF_TOKEN = process.env.HF_TOKEN;
+  const { token, user } = useUser();
+  const { push } = useRouter();
+  const [caption, setCaption] = useState("");
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setPrompt(e.target.value);
+  };
+  const handleCaption = (e: ChangeEvent<HTMLInputElement>) => {
+    setCaption(e.target.value);
   };
 
   const generateImage = async () => {
@@ -25,7 +35,7 @@ const Generate = () => {
         Authorization: `Bearer ${HF_TOKEN}`,
       };
       const response = await fetch(
-        `https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0`,
+        "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
         {
           method: "POST",
           headers: headers,
@@ -43,12 +53,43 @@ const Generate = () => {
         throw new Error(`HTTP error! status:${response.status}`);
       }
       const blob = await response.blob();
-      const URLIMG = URL.createObjectURL(blob);
-      setImageUrl(URLIMG);
+
+      const file = new File([blob], "generated.png", { type: "image/png" });
+      const uploaded = await upload(file.name, file, {
+        access: "public",
+        handleUploadUrl: "/api/upload",
+      });
+      console.log(uploaded);
+
+      setImageUrl(uploaded.url);
     } catch (error) {
       setIsLoading(false);
     }
   };
+  const CreatingPost = async () => {
+    const response = await fetch("http://localhost:8080/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+
+      body: JSON.stringify({
+        userId: user?._id,
+        caption: caption,
+        images: [imageUrl],
+      }),
+    });
+
+    if (response.ok) {
+      const newPost = await response.json();
+      toast.success("new post success", { richColors: true });
+      push("/");
+    } else {
+      toast.error("failed", { richColors: true });
+    }
+  };
+
   return (
     <div>
       <div className="flex justify-items-between">
@@ -76,21 +117,18 @@ const Generate = () => {
         />
         <Button
           onClick={generateImage}
-          disabled={!prompt.trim() || isLoading}
-          className={`bg-blue-500  w-[200px] transition-all duration-200 font-semibold rounded-lg ${
-            !prompt.trim() || isLoading
-              ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-              : "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-300 transform hover:scale-105"
-          }`}
+          // disabled={!prompt.trim() || isLoading}
+          className="bg-blue-500  w-[200px] transition-all duration-200 font-semibold rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-300 transform hover:scale-105"
         >
-          {isLoading ? (
+          Generate
+          {/* {isLoading ? (
             <div className="flex justify-items-center">
               <div className="animate-spin border-white rounded-full h-5 w-5  mr-3"></div>
               Generating ...
             </div>
           ) : (
             "Generate image"
-          )}
+          )} */}
         </Button>
       </div>
       {/* {isLoading && (
@@ -114,7 +152,20 @@ const Generate = () => {
           </div>
         </div>
       )}
+      <Input
+        value={caption}
+        placeholder="Caption!!!"
+        onChange={(e) => {
+          handleCaption(e);
+        }}
+      ></Input>
+      <Button onClick={CreatingPost}>Create Post</Button>
     </div>
   );
 };
 export default Generate;
+// //       ${
+//               !prompt.trim() || isLoading
+//                 ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+//                 : "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-300 transform hover:scale-105"
+//             }

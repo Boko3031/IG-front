@@ -1,18 +1,131 @@
 "use client";
 import { useUser } from "@/providers/authProvider";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { COMMENT } from "@/iconFolders/comment";
+import { Footer } from "./_component/Footer";
+import { Header } from "./_component/Header";
+import { Heart } from "lucide-react";
+
+type el = {
+  _id: string;
+  userId: { _id: string; userName: string };
+  caption: string;
+  like: string;
+  images: string;
+  comment: string;
+};
 
 export default function Home() {
-  const { user } = useUser();
+  const { user, token } = useUser();
   const { push } = useRouter();
+  const [post, setPost] = useState<el[]>();
+  const [likedPost, setLikedPost] = useState();
+  const myId = user?._id;
+
+  const AllPost = async () => {
+    const response = await fetch("http://localhost:8080/post", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const newPost = await response.json();
+      setPost(newPost);
+    }
+  };
+
+  const PostLike = async (postId: String) => {
+    const response = await fetch(
+      `http://localhost:8080/toggle-like/${postId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const likes = await response.json();
+      setLikedPost(likes);
+      AllPost();
+    }
+  };
+
+  const strangerPro = (strangerId: string) => {
+    push(`/profile/${strangerId}`);
+  };
 
   useEffect(() => {
-    if (!user) push("/login");
+    if (!token) {
+      push("/login");
+    } else {
+      AllPost();
+    }
   }, []);
+
   return (
-    <div className="">
-      <div className="">{user?.userName}</div>
+    <div>
+      <Header />
+      <hr />
+      <div>
+        {post?.map((post) => {
+          return (
+            <div key={post._id}>
+              <div
+                style={{ backgroundImage: `url('unknown.svg')` }}
+                className="w-[25px] h-[25px] bg-center shadow-2xl font-bold  "
+                onClick={() => {
+                  strangerPro(post?.userId._id);
+                }}
+              >
+                <div className="pl-8">{post.userId.userName}</div>
+              </div>
+
+              <img src={post?.images} />
+              <div className="flex">
+                <div
+                  className=" px-2 py-2"
+                  onClick={() => {
+                    PostLike(post?._id);
+                  }}
+                >
+                  {post.like.includes(myId!) ? (
+                    <div>
+                      <Heart fill="red" color="red" />
+                    </div>
+                  ) : (
+                    <div>
+                      <Heart />
+                    </div>
+                  )}
+                </div>
+                <div className=" px-2 py-2">
+                  <COMMENT />
+                </div>
+              </div>
+              <div className="font-bold">{post.like.length} likes</div>
+              <div>{post.caption}</div>
+              <div className="text-gray-400">
+                View all {post.comment.length} comments
+              </div>
+              <div
+                onClick={() => {
+                  push("/comment");
+                }}
+                className="text-gray-400"
+              >
+                Add a comment...
+              </div>
+              <hr />
+            </div>
+          );
+        })}
+      </div>
+      <Footer />
     </div>
   );
 }

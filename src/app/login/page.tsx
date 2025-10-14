@@ -15,7 +15,7 @@ export default function Home() {
     email: "",
     password: "",
   });
-  const { login, user } = useUser();
+  const { login, user, token } = useUser();
   const { push } = useRouter();
 
   const addLogin = async () => {
@@ -33,7 +33,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (user) push("/");
+    if (token) push("/");
   }, []);
   return (
     <div className=" flex justify-center ">
@@ -65,7 +65,17 @@ export default function Home() {
             Log In
           </Button>
         </div>
-        <div>Don not have an account? Sign Up</div>
+        <div className="flex">
+          Don not have an account?
+          <div
+            className="text-blue-500"
+            onClick={() => {
+              push("/signUp");
+            }}
+          >
+            Sign Up
+          </div>
+        </div>
       </div>
     </div>
   );
