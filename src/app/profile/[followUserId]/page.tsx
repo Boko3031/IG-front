@@ -1,6 +1,7 @@
 "use client";
 
 import { Footer } from "@/app/_component/Footer";
+import { Button } from "@/components/ui/button";
 import { UNKNOWN } from "@/iconFolders/unknown";
 import { useUser } from "@/providers/authProvider";
 import { useParams } from "next/navigation";
@@ -69,21 +70,21 @@ const Page = () => {
           <div>{user?.userName}</div>
           <div>
             {user?.followers.includes(user._id) ? (
-              <button
+              <Button
                 onClick={() => {
-                  UserFolower(user!._id);
+                  UserFolower(user?._id);
                 }}
               >
                 Unfollow
-              </button>
+              </Button>
             ) : (
-              <button
+              <Button
                 onClick={() => {
                   UserFolower(user!._id);
                 }}
               >
                 follow
-              </button>
+              </Button>
             )}
           </div>
         </div>
