@@ -19,7 +19,7 @@ const Page = () => {
   const [person, setPerson] = useState<el[]>();
   const { user, token } = useUser();
   const params = useParams();
-  const userId = params.userId as string;
+  const userId = params.followUserId as string;
 
   const strangeUsersPost = async () => {
     const response = await fetch(`http://localhost:8080/user-posts/${userId}`, {

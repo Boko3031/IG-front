@@ -1,11 +1,11 @@
 "use client";
 import { FACE } from "@/iconFolders/face";
-import { useRouter } from "next/navigation";
-import { Footer } from "../_component/Footer";
+import { useParams, useRouter } from "next/navigation";
+import { Footer } from "@/app/_component/Footer";
 import { Back } from "@/iconFolders/Back";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, useState } from "react";
-import { log } from "node:console";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useUser } from "@/providers/authProvider";
 
 type comType = {
   comments: string;
@@ -20,8 +20,32 @@ const CommentFunction = () => {
     if (name === "comments") {
       setComments({ ...comments, comments: value });
     }
-    console.log(value);
   };
+  const { token, user } = useUser();
+  const params = useParams();
+  const postId = params.postId;
+  const bringComment = async () => {
+    const response = await fetch(
+      `http://localhost:8080/comment/get/${postId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      await response.json();
+    }
+  };
+  useEffect(() => {
+    if (!token) {
+    } else {
+      bringComment();
+    }
+  }, []);
+
   return (
     <div>
       <div
@@ -44,7 +68,7 @@ const CommentFunction = () => {
             }}
           />
         </div>
-        <button className="text-blue-300">Comment</button>
+        <button className="text-blue-300" onChange={()=>{}}>Comment</button>
       </div>
       <div className=" fixed bottom-0 ">
         <hr />
