@@ -10,10 +10,21 @@ import { useUser } from "@/providers/authProvider";
 type comType = {
   comments: string;
 };
+type commentType = {
+  _id: string;
+  comment: string;
+  post: {
+    caption: string;
+  };
+  user: {
+    userName: string;
+  };
+};
 
 const CommentFunction = () => {
   const { push } = useRouter();
   const [comments, setComments] = useState<comType>({ comments: "" });
+  const [com, setCom] = useState<commentType[]>([]);
 
   const handleComment = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -24,11 +35,24 @@ const CommentFunction = () => {
   const { token, user } = useUser();
   const params = useParams();
   const postId = params.postId;
+  const createComment = async () => {
+    const response = await fetch("http://localhost:8080/comment/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (response.ok) {
+      const createdComment = await response.json();
+      setComments(createdComment);
+    }
+  };
   const bringComment = async () => {
     const response = await fetch(
       `http://localhost:8080/comment/get/${postId}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -36,9 +60,12 @@ const CommentFunction = () => {
       }
     );
     if (response.ok) {
-      await response.json();
+      const comment = await response.json();
+      setCom(comment);
     }
   };
+  console.log(com);
+
   useEffect(() => {
     if (!token) {
     } else {
@@ -57,6 +84,22 @@ const CommentFunction = () => {
       </div>
       <div>Comment</div>
       <hr />
+      <div>
+        {com?.map((com) => {
+          return (
+            <div key={com._id}>
+              <div className="flex">
+                <div className="font-bold "> {user?.userName}</div>
+                <div>{com.post.caption}</div>
+              </div>
+              <div className="flex">
+                <div className="font-bold "> {com.user.userName}</div>
+                <div>{com.comment}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
       <div className="fixed bottom-1 mb-10 flex items-center justify-evenly w-full">
         <div className="flex ">
           <FACE />
@@ -68,7 +111,14 @@ const CommentFunction = () => {
             }}
           />
         </div>
-        <button className="text-blue-300" onChange={()=>{}}>Comment</button>
+        <button
+          className="text-blue-300"
+          onChange={() => {
+            createComment();
+          }}
+        >
+          Comment
+        </button>
       </div>
       <div className=" fixed bottom-0 ">
         <hr />

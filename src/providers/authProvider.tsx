@@ -21,6 +21,7 @@ type user = {
   followers: string[];
   following: string[];
   bio: string;
+  profilePic: string;
 };
 type ContextType = {
   user: user | null;

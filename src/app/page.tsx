@@ -105,7 +105,7 @@ export default function Home() {
               <div className="font-bold">{post.like.length} likes</div>
               <div>{post.caption}</div>
               <div className="text-gray-400">
-                View all {post.comment.length} comments
+                {/* View all {post.comment.length} comments */}
               </div>
               <div
                 onClick={() => {
