@@ -13,7 +13,7 @@ import {
   SetStateAction,
   Dispatch,
 } from "react";
-type user = {
+export type user = {
   _id: string;
   userName: string;
   password: string;

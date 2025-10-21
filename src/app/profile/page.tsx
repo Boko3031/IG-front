@@ -41,7 +41,7 @@ const Personal = () => {
     }
   }, [token]);
 
-  console.log(token);
+  console.log(user?._id);
 
   return (
     <div>

@@ -2,6 +2,7 @@ import { HOME } from "@/iconFolders/home";
 import { PLUS } from "@/iconFolders/plus";
 import { USER } from "@/iconFolders/user";
 import { useRouter } from "next/navigation";
+import { SEARCH } from "@/iconFolders/search";
 
 export const Footer = () => {
   const { push } = useRouter();
@@ -14,6 +15,15 @@ export const Footer = () => {
           }}
         >
           <HOME />
+        </div>
+
+        <div
+          onClick={() => {
+            push("/search");
+          }}
+        >
+          {" "}
+          <SEARCH />
         </div>
         <div
           onClick={() => {

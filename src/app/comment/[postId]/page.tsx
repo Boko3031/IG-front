@@ -7,12 +7,9 @@ import { Input } from "@/components/ui/input";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useUser } from "@/providers/authProvider";
 
-type comType = {
-  comments: string;
-};
 type commentType = {
   _id: string;
-  comment: string;
+  comments: string;
   post: {
     caption: string;
   };
@@ -23,30 +20,31 @@ type commentType = {
 
 const CommentFunction = () => {
   const { push } = useRouter();
-  const [comments, setComments] = useState<comType>({ comments: "" });
+  const [comments, setComments] = useState<string>("");
   const [com, setCom] = useState<commentType[]>([]);
+  const [posted, setPosted] = useState<boolean>(false);
 
   const handleComment = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    if (name === "comments") {
-      setComments({ ...comments, comments: value });
-    }
+    setComments(event.target.value);
   };
   const { token, user } = useUser();
   const params = useParams();
   const postId = params.postId;
   const createComment = async () => {
+    setPosted(true);
     const response = await fetch("http://localhost:8080/comment/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        postId,
+        comments,
+      }),
     });
-    if (response.ok) {
-      const createdComment = await response.json();
-      setComments(createdComment);
-    }
+    console.log(response);
+    setPosted(false);
   };
   const bringComment = async () => {
     const response = await fetch(
@@ -64,15 +62,11 @@ const CommentFunction = () => {
       setCom(comment);
     }
   };
-  console.log(com);
 
   useEffect(() => {
-    if (!token) {
-    } else {
-      bringComment();
-    }
-  }, []);
-
+    if (token) bringComment();
+  }, [posted]);
+  console.log(com);
   return (
     <div>
       <div
@@ -87,14 +81,10 @@ const CommentFunction = () => {
       <div>
         {com?.map((com) => {
           return (
-            <div key={com._id}>
-              <div className="flex">
-                <div className="font-bold "> {user?.userName}</div>
-                <div>{com.post.caption}</div>
-              </div>
+            <div key={com._id}> 
               <div className="flex">
                 <div className="font-bold "> {com.user.userName}</div>
-                <div>{com.comment}</div>
+                <div>{com.comments}</div>
               </div>
             </div>
           );
@@ -113,7 +103,7 @@ const CommentFunction = () => {
         </div>
         <button
           className="text-blue-300"
-          onChange={() => {
+          onClick={() => {
             createComment();
           }}
         >

@@ -8,7 +8,8 @@ import { Header } from "./_component/Header";
 import { Heart } from "lucide-react";
 import Link from "next/link";
 
-type el = {
+
+ type el = {
   _id: string;
   userId: { _id: string; userName: string };
   caption: string;
@@ -98,8 +99,14 @@ export default function Home() {
                     </div>
                   )}
                 </div>
-                <div className=" px-2 py-2">
+                <div
+                  className=" px-2 py-2"
+                  onClick={() => {
+                    push(`/comment/${post._id}`);
+                  }}
+                >
                   <COMMENT />
+     
                 </div>
               </div>
               <div className="font-bold">{post.like.length} likes</div>
