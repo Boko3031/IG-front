@@ -7,14 +7,16 @@ import { Footer } from "./_component/Footer";
 import { Header } from "./_component/Header";
 import { Heart } from "lucide-react";
 import Link from "next/link";
+import { EditPost } from "./_component/EditPost";
+import { Story } from "./_component/story";
+import { Button } from "@/components/ui/button";
 
-
- type el = {
+export type el = {
   _id: string;
   userId: { _id: string; userName: string };
   caption: string;
   like: string;
-  images: string;
+  images: string[];
   comment: string;
 };
 
@@ -23,6 +25,8 @@ export default function Home() {
   const { push } = useRouter();
   const [post, setPost] = useState<el[]>();
   const [likedPost, setLikedPost] = useState();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<el | null>(null);
   const myId = user?._id;
 
   const AllPost = async () => {
@@ -39,7 +43,7 @@ export default function Home() {
     }
   };
 
-  const PostLike = async (postId: String) => {
+  const PostLike = async (postId: string) => {
     const response = await fetch(
       `http://localhost:8080/toggle-like/${postId}`,
       {
@@ -81,7 +85,22 @@ export default function Home() {
                 </div>
               </Link>
 
-              <img src={post?.images} />
+              <Button
+                onClick={() => {
+                  setIsOpen(true);
+                  setSelectedPost(post);
+                }}
+              >
+                edit
+              </Button>
+              {selectedPost && (
+                <EditPost
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                  selectedPost={selectedPost!}
+                />
+              )}
+              <Story post={post} />
               <div className="flex">
                 <div
                   className=" px-2 py-2"
@@ -106,7 +125,6 @@ export default function Home() {
                   }}
                 >
                   <COMMENT />
-     
                 </div>
               </div>
               <div className="font-bold">{post.like.length} likes</div>

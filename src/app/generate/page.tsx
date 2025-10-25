@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 const Generate = () => {
   const [prompt, setPrompt] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const HF_TOKEN = process.env.HF_TOKEN;
   const { token, user } = useUser();
@@ -27,7 +27,6 @@ const Generate = () => {
   const generateImage = async () => {
     if (!prompt.trim()) return;
     setIsLoading(true);
-    setImageUrl("");
 
     try {
       const headers = {
@@ -61,7 +60,10 @@ const Generate = () => {
       });
       console.log(uploaded);
 
-      setImageUrl(uploaded.url);
+      setImageUrl((prev) => {
+        return [...prev, uploaded.url];
+      });
+      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
     }
@@ -77,12 +79,12 @@ const Generate = () => {
       body: JSON.stringify({
         userId: user?._id,
         caption: caption,
-        images: [imageUrl],
+        images: imageUrl,
       }),
     });
 
     if (response.ok) {
-      const newPost = await response.json();
+      await response.json();
       toast.success("new post success", { richColors: true });
       push("/");
     } else {
@@ -117,38 +119,24 @@ const Generate = () => {
         />
         <Button
           onClick={generateImage}
-          // disabled={!prompt.trim() || isLoading}
           className="bg-blue-500  w-[200px] transition-all duration-200 font-semibold rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-300 transform hover:scale-105"
         >
           Generate
-          {/* {isLoading ? (
-            <div className="flex justify-items-center">
-              <div className="animate-spin border-white rounded-full h-5 w-5  mr-3"></div>
-              Generating ...
-            </div>
-          ) : (
-            "Generate image"
-          )} */}
         </Button>
       </div>
-      {/* {isLoading && (
-        <div className="text-center bg-purple-50 rounded-lg">
-          <div className="text-purple-400">unshij bnnn</div>
-          <div className="text-sm text-purple-500">
-            this may take 10-30 second
-          </div>
-        </div>
-      )} */}
       {imageUrl && (
         <div>
           <div className="text-xl font-semibold text-gray-800">
             Your generated Image
           </div>
           <div className="bg-gray-50 p-4 rounded-lg">
-            <img
-              className="w-full h-auto rounded-lg shadow-md "
-              src={imageUrl}
-            />
+            {imageUrl.map((url) => (
+              <img
+                key={url}
+                className="w-full h-auto rounded-lg shadow-md "
+                src={url}
+              />
+            ))}
           </div>
         </div>
       )}
@@ -164,8 +152,3 @@ const Generate = () => {
   );
 };
 export default Generate;
-// //       ${
-//               !prompt.trim() || isLoading
-//                 ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-//                 : "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-300 transform hover:scale-105"
-//             }

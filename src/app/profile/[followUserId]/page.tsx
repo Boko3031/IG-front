@@ -1,8 +1,6 @@
 "use client";
 
 import { Footer } from "@/app/_component/Footer";
-import { Button } from "@/components/ui/button";
-import { UNKNOWN } from "@/iconFolders/unknown";
 import { useUser } from "@/providers/authProvider";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -117,14 +115,13 @@ const Page = () => {
   };
   console.log(person);
   console.log(follow);
-  
 
   return (
     <div>
       <div>
         {person.map((person) => {
           return (
-            <div>
+            <div key={person._id}>
               <div>{person.userName}</div>
               {person.email}
             </div>
