@@ -8,6 +8,7 @@ import { UNKNOWN } from "@/iconFolders/unknown";
 import { useRouter } from "next/navigation";
 import { Camera } from "@/iconFolders/Camera";
 import { Button } from "@/components/ui/button";
+import { BUTTON } from "@/iconFolders/exitButton";
 
 type PostType = {
   _id: string;
@@ -41,12 +42,17 @@ const Personal = () => {
     }
   }, [token]);
 
-  console.log(user?._id);
-
   return (
     <div>
       <div>
         <div>
+          <div
+            onClick={() => {
+              push("/");
+            }}
+          >
+            <BUTTON />
+          </div>
           <div>{user?.userName}</div>
           <hr />
           <div className="flex">
@@ -56,7 +62,7 @@ const Personal = () => {
           </div>
           <div>{user?.bio}</div>
           <hr />
-          <div className="flex items-center ">
+          <div className="flex justify-evenly">
             <div>
               <div>{posts.length}</div>posts
             </div>

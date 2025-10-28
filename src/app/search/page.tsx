@@ -52,7 +52,7 @@ const Page = () => {
         ? users.map((user) => {
             return <div key={user._id}>{user.userName}</div>;
           })
-        : "iim user baihgu baina"}
+        : "baihgu baina"}
       <div>
         <Footer />
       </div>

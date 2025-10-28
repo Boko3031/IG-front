@@ -15,7 +15,7 @@ export default function Home() {
     email: "",
     password: "",
   });
-  const { login, user, token } = useUser();
+  const { login, token } = useUser();
   const { push } = useRouter();
 
   const addLogin = async () => {

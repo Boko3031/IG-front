@@ -56,7 +56,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       setToken(token);
       const decodedToken: decodedType = jwtDecode(token);
       setUser(decodedToken.data);
-      // setUser(user);
       console.log("login working");
       push("/");
       toast.success("amjilttai nevterlee", { richColors: true });

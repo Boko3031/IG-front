@@ -6,7 +6,6 @@ import { COMMENT } from "@/iconFolders/comment";
 import { Footer } from "./_component/Footer";
 import { Header } from "./_component/Header";
 import { Heart } from "lucide-react";
-import Link from "next/link";
 import { EditPost } from "./_component/EditPost";
 import { Story } from "./_component/story";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,7 @@ export type el = {
 export default function Home() {
   const { user, token } = useUser();
   const { push } = useRouter();
-  const [post, setPost] = useState<el[]>();
+  const [post, setPost] = useState<el[]>([]);
   const [likedPost, setLikedPost] = useState();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<el | null>(null);
@@ -76,14 +75,15 @@ export default function Home() {
         {post?.map((post) => {
           return (
             <div key={post._id}>
-              <Link href={`profile/${post.userId._id}`}>
-                <div
-                  style={{ backgroundImage: `url('unknown.svg')` }}
-                  className="w-[25px] h-[25px] bg-center shadow-2xl font-bold  "
-                >
-                  <div className="pl-8">{post.userId.userName}</div>
-                </div>
-              </Link>
+              <div
+                onClick={() => {
+                  push(`profile/${post.userId._id}`);
+                }}
+                style={{ backgroundImage: `url('unknown.svg')` }}
+                className="w-[25px] h-[25px] bg-center shadow-2xl font-bold  "
+              >
+                <div className="pl-8">{post.userId?.userName}</div>
+              </div>
 
               <Button
                 onClick={() => {

@@ -27,7 +27,7 @@ const CommentFunction = () => {
   const handleComment = (event: ChangeEvent<HTMLInputElement>) => {
     setComments(event.target.value);
   };
-  const { token, user } = useUser();
+  const { token } = useUser();
   const params = useParams();
   const postId = params.postId;
   const createComment = async () => {
@@ -81,7 +81,7 @@ const CommentFunction = () => {
       <div>
         {com?.map((com) => {
           return (
-            <div key={com._id}> 
+            <div key={com._id}>
               <div className="flex">
                 <div className="font-bold "> {com.user.userName}</div>
                 <div>{com.comments}</div>

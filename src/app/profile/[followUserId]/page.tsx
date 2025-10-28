@@ -1,16 +1,13 @@
 "use client";
 
 import { Footer } from "@/app/_component/Footer";
+import { Button } from "@/components/ui/button";
+import { BUTTON } from "@/iconFolders/exitButton";
+import { UNKNOWN } from "@/iconFolders/unknown";
 import { useUser } from "@/providers/authProvider";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-
-// type el = {
-//   _id: string;
-//   userId: { _id: string; userName: string };
-//   images: [string];
-// };
 
 type user = {
   _id: string;
@@ -33,25 +30,12 @@ type el2 = {
 
 const Page = () => {
   const [posts, setPosts] = useState<el2[] | []>([]);
-  const [person, setPerson] = useState<user[]>([]);
+  const [person, setPerson] = useState<user | null>(null);
   const [follow, setFollow] = useState([]);
   const { user, token } = useUser();
+  const { push } = useRouter();
   const params = useParams();
   const userId = params.followUserId as string;
-
-  // const strangeUsersPost = async () => {
-  //   const response = await fetch(`http://localhost:8080/user-posts/${userId}`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
-  //   if (response.ok) {
-  //     const oneperson = await response.json();
-  //     setPerson(oneperson);
-  //   }
-  // };
 
   const fetchUserData = async () => {
     const response = await fetch(`http://localhost:8080/user-posts/${userId}`, {
@@ -81,8 +65,9 @@ const Page = () => {
       }
     );
     if (response.ok) {
-      const posts = await response.json();
-      setPosts(posts);
+      const post = await response.json();
+      setPosts(post);
+      fetchUserData();
     } else {
       toast.error("gg");
     }
@@ -94,9 +79,9 @@ const Page = () => {
     }
   }, [token]);
 
-  const UserFolower = async (followedUserId: string) => {
+  const UserFolower = async () => {
     const response = await fetch(
-      `http://localhost:8080/toggle-follow/${followedUserId}`,
+      `http://localhost:8080/toggle-follow/${userId}`,
       {
         method: "POST",
         headers: {
@@ -113,62 +98,92 @@ const Page = () => {
       toast.error("GG");
     }
   };
-  console.log(person);
-  console.log(follow);
 
   return (
     <div>
       <div>
-        {person.map((person) => {
-          return (
-            <div key={person._id}>
-              <div>{person.userName}</div>
-              {person.email}
+        {
+          <div key={person?._id}>
+            <div className="flex">
+              <div
+                onClick={() => {
+                  push("/");
+                }}
+              >
+                <BUTTON />
+              </div>
+              <div>{person?.userName}</div>
             </div>
-          );
-        })}
-      </div>
-      {/* <div>{user?.userName}</div>
-      <hr />
-      <div className="flex  items-center">
-        <UNKNOWN />
-        <div className="flex flex-col items-center ">
-          <div>{user?.userName}</div>
-          <div>
-            {user?.followers.includes(user._id) ? (
-              <Button
-                onClick={() => {
-                  UserFolower(user?._id);
-                }}
-              >
-                Unfollow
-              </Button>
-            ) : (
-              <Button
-                onClick={() => {
-                  UserFolower(user!._id);
-                }}
-              >
-                follow
-              </Button>
-            )}
+            <hr />
+            <div className="flex gap-2">
+              <div className="flex  items-center">
+                <UNKNOWN />
+              </div>
+              <div className="flex flex-col items-center ">
+                <div>{person?.userName}</div>
+                {person?.followers.includes(user!._id) ? (
+                  <Button
+                    onClick={() => {
+                      UserFolower();
+                    }}
+                  >
+                    Unfollow
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      UserFolower();
+                    }}
+                  >
+                    follow
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
+        }
       </div>
-      <div>{user?.bio}</div>
       <hr />
-      <div className="flex items-center ">
+      <div>{person?.bio}</div>
+      <hr />
+      <div className="flex justify-evenly">
         <div>
-          <div>0</div>posts
+          <div>{posts.length}</div>posts
         </div>
         <div>
-          <div>{user?.followers.length}</div>followers
+          <div>{person?.followers.length}</div>followers
         </div>
         <div>
-          <div>{user?.following.length}</div>following
+          <div>{person?.following.length}</div>following
         </div>
       </div>
-      <hr /> */}
+      <hr />
+      <div>
+        <div>
+          {
+            <div>
+              {posts.length === 0 ? (
+                <div className="flex flex-col items-center  ">
+                  <div>This person has no posts.</div>
+                </div>
+              ) : (
+                <div className="flex w-screen flex-wrap">
+                  {posts.map((post) => {
+                    return (
+                      <div key={post._id}>
+                        <img
+                          className=" m-0.5 h-[180px] w-[139px]"
+                          src={post.images[0]}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          }
+        </div>
+      </div>
       <Footer />
     </div>
   );

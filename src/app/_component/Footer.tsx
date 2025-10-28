@@ -22,7 +22,6 @@ export const Footer = () => {
             push("/search");
           }}
         >
-          {" "}
           <SEARCH />
         </div>
         <div

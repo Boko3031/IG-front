@@ -5,7 +5,7 @@ import { BUTTON } from "@/iconFolders/exitButton";
 import { useUser } from "@/providers/authProvider";
 import { upload } from "@vercel/blob/client";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const Generate = () => {
@@ -91,7 +91,9 @@ const Generate = () => {
       toast.error("failed", { richColors: true });
     }
   };
-
+  useEffect(() => {
+    if (!token) push("/login");
+  }, []);
   return (
     <div>
       <div className="flex justify-items-between">
