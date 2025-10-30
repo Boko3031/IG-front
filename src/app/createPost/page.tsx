@@ -15,7 +15,6 @@ const CreatePost = () => {
     if (selectedFile) return;
     setFile(selectedFile!);
   };
-  console.log(file);
 
   const uploadedImage = async () => {
     if (!file) return;
@@ -25,7 +24,6 @@ const CreatePost = () => {
     });
     console.log(uploaded);
   };
-  console.log(file);
 
   return (
     <div>

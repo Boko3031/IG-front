@@ -35,7 +35,6 @@ const Page = () => {
       setUsers(user);
     }
   };
-  console.log(user);
   useEffect(() => {
     if (token && searchValue) {
       Search();

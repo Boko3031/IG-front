@@ -43,7 +43,6 @@ const CommentFunction = () => {
         comments,
       }),
     });
-    console.log(response);
     setPosted(false);
   };
   const bringComment = async () => {
@@ -66,7 +65,6 @@ const CommentFunction = () => {
   useEffect(() => {
     if (token) bringComment();
   }, [posted]);
-  console.log(com);
   return (
     <div>
       <div

@@ -35,7 +35,6 @@ export default function Home() {
       setInputValues({ ...inputValues, Username: value });
     }
   };
-  console.log(inputValues);
   useEffect(() => {
     if (user) push("/");
   }, []);
