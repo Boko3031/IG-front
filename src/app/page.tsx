@@ -8,7 +8,7 @@ import { Header } from "./_component/Header";
 import { Heart } from "lucide-react";
 import { EditPost } from "./_component/EditPost";
 import { Story } from "./_component/story";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export type el = {
   _id: string;
@@ -75,24 +75,30 @@ export default function Home() {
         {post?.map((post) => {
           return (
             <div key={post._id}>
-              <div
-                onClick={() => {
-                  push(`profile/${post.userId._id}`);
-                }}
-                style={{ backgroundImage: `url('unknown.svg')` }}
-                className="w-[25px] h-[25px] bg-center shadow-2xl font-bold  "
-              >
-                <div className="pl-8">{post.userId?.userName}</div>
+              <div className=" flex m-2">
+                <div>
+                  <Avatar>
+                    <AvatarImage src={user?.profilePic} />
+                    <AvatarFallback>
+                      {user?.userName.charAt(0).toUpperCase()}
+                      {user?.userName.charAt(1).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+                <div className="ml-3 mt-1 font-bold">
+                  {post.userId?.userName}
+                </div>
+                <button
+                  className="ml-2 "
+                  onClick={() => {
+                    setIsOpen(true);
+                    setSelectedPost(post);
+                  }}
+                >
+                  edit
+                </button>
               </div>
 
-              <Button
-                onClick={() => {
-                  setIsOpen(true);
-                  setSelectedPost(post);
-                }}
-              >
-                edit
-              </Button>
               {selectedPost && (
                 <EditPost
                   isOpen={isOpen}
@@ -149,3 +155,6 @@ export default function Home() {
     </div>
   );
 }
+// onClick={() => {
+//   push(`profile/${post.userId._id}`);
+// }}

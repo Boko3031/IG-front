@@ -46,19 +46,24 @@ const Personal = () => {
     <div>
       <div>
         <div>
-          <div
-            onClick={() => {
-              push("/");
-            }}
-          >
-            <BUTTON />
+          <div className="flex m-3">
+            <div
+              className="flex"
+              onClick={() => {
+                push("/");
+              }}
+            >
+              <BUTTON />
+            </div>
+            <div className="ml-30 ">{user?.userName}</div>
           </div>
-          <div>{user?.userName}</div>
           <hr />
-          <div className="flex">
+          <div className="flex  ">
             <UNKNOWN />
-            <div>{user?.userName}</div>
-            <Button variant="ghost">Edit profile</Button>
+            <div className="flex flex-col">
+              <div className="ml-5">{user?.userName}</div>
+              <Button variant="ghost">Edit profile</Button>
+            </div>
           </div>
           <div>{user?.bio}</div>
           <hr />

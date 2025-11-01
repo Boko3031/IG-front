@@ -104,15 +104,16 @@ const Page = () => {
       <div>
         {
           <div key={person?._id}>
-            <div className="flex">
+            <div className="flex m-3">
               <div
+                className="flex"
                 onClick={() => {
                   push("/");
                 }}
               >
                 <BUTTON />
               </div>
-              <div>{person?.userName}</div>
+              <div className="ml-30 ">{person?.userName}</div>
             </div>
             <hr />
             <div className="flex gap-2">
@@ -123,6 +124,7 @@ const Page = () => {
                 <div>{person?.userName}</div>
                 {person?.followers.includes(user!._id) ? (
                   <Button
+                    variant="ghost"
                     onClick={() => {
                       UserFolower();
                     }}
@@ -131,6 +133,7 @@ const Page = () => {
                   </Button>
                 ) : (
                   <Button
+                    variant="ghost"
                     onClick={() => {
                       UserFolower();
                     }}
