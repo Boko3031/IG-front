@@ -76,7 +76,11 @@ export default function Home() {
           return (
             <div key={post._id}>
               <div className=" flex m-2">
-                <div>
+                <div
+                  onClick={() => {
+                    push(`profile/${post.userId._id}`);
+                  }}
+                >
                   <Avatar>
                     <AvatarImage src={user?.profilePic} />
                     <AvatarFallback>
@@ -155,6 +159,3 @@ export default function Home() {
     </div>
   );
 }
-// onClick={() => {
-//   push(`profile/${post.userId._id}`);
-// }}
