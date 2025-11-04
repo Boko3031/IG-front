@@ -21,7 +21,7 @@ const Page = () => {
 
   const Search = async () => {
     const response = await fetch(
-      `http://localhost:8080/search/${searchValue}`,
+      `hhttps://ig-back-end.onrender.com/search/${searchValue}`,
       {
         method: "GET",
         headers: {

@@ -52,7 +52,7 @@ const Generate = () => {
     }
   };
   const CreatingPost = async () => {
-    const response = await fetch("http://localhost:8080/create", {
+    const response = await fetch("https://ig-back-end.onrender.com/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

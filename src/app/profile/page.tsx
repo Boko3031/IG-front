@@ -22,7 +22,7 @@ const Personal = () => {
   const { push } = useRouter();
 
   const getUserPost = async () => {
-    const response = await fetch("http://localhost:8080/user-posts", {
+    const response = await fetch("https://ig-back-end.onrender.com/user-posts", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -32,7 +32,7 @@ const CommentFunction = () => {
   const postId = params.postId;
   const createComment = async () => {
     setPosted(true);
-    const response = await fetch("http://localhost:8080/comment/create", {
+    const response = await fetch("https://ig-back-end.onrender.com/comment/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const CommentFunction = () => {
   };
   const bringComment = async () => {
     const response = await fetch(
-      `http://localhost:8080/comment/get/${postId}`,
+      `https://ig-back-end.onrender.com/comment/get/${postId}`,
       {
         method: "GET",
         headers: {

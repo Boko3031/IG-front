@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const { push } = useRouter();
 
   const login = async (email: string, password: string) => {
-    const response = await fetch("http://localhost:8080/login", {
+    const response = await fetch("https://ig-back-end.onrender.com/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   };
 
   const signUp = async (email: string, password: string, userName: string) => {
-    const response = await fetch("http://localhost:8080/signUp", {
+    const response = await fetch("https://ig-back-end.onrender.com/signUp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

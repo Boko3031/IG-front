@@ -30,7 +30,7 @@ export default function Home() {
   const myId = user?._id;
 
   const AllPost = async () => {
-    const response = await fetch("http://localhost:8080/post", {
+    const response = await fetch("https://ig-back-end.onrender.com/post", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +45,7 @@ export default function Home() {
 
   const PostLike = async (postId: string) => {
     const response = await fetch(
-      `http://localhost:8080/toggle-like/${postId}`,
+      `https://ig-back-end.onrender.com/toggle-like/${postId}`,
       {
         method: "POST",
         headers: {
@@ -69,7 +69,7 @@ export default function Home() {
   }, []);
   const DeletePost = async (postId: string) => {
     const response = await fetch(
-      `http://localhost:8080/delete-post/${postId}`,
+      `https://ig-back-end.onrender.com/delete-post/${postId}`,
       {
         method: "DELETE",
         headers: {
