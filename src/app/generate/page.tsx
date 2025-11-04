@@ -29,40 +29,23 @@ const Generate = () => {
     setIsLoading(true);
 
     try {
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${HF_TOKEN}`,
-      };
-      const response = await fetch(
-        "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
-        {
-          method: "POST",
-          headers: headers,
-          body: JSON.stringify({
-            inputs: prompt,
-            parameters: {
-              negative_prompt: "blurry,bad quality ,distorted",
-              num_inference_steps: 20,
-              quidance_scale: 7.5,
-            },
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status:${response.status}`);
-      }
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        body: JSON.stringify({ prompt }),
+      });
+
+      if (!response.ok) throw new Error("Failed to generate");
+
       const blob = await response.blob();
 
       const file = new File([blob], "generated.png", { type: "image/png" });
+
       const uploaded = await upload(file.name, file, {
         access: "public",
         handleUploadUrl: "/api/upload",
       });
-      console.log(uploaded);
 
-      setImageUrl((prev) => {
-        return [...prev, uploaded.url];
-      });
+      setImageUrl((prev) => [...prev, uploaded.url]);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);

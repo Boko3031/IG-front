@@ -14,12 +14,16 @@ type EditDialogType = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   selectedPost: el | null;
+  DeletePost: (postId: string) => Promise<void>;
+  postId: string;
 };
 
 export const EditPost = ({
   isOpen,
   setIsOpen,
   selectedPost,
+  DeletePost,
+  postId,
 }: EditDialogType) => {
   const [caption, setCaption] = useState(selectedPost?.caption);
   return (
@@ -45,7 +49,14 @@ export const EditPost = ({
               >
                 cancel
               </Button>
-              <Button onClick={()=>{}}>edit</Button>
+              <Button onClick={() => {}}>edit</Button>
+              <Button
+                onClick={() => {
+                  DeletePost(postId);
+                }}
+              >
+                delete
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

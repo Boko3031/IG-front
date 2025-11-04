@@ -25,6 +25,7 @@ export default function Home() {
   const [post, setPost] = useState<el[]>([]);
   const [likedPost, setLikedPost] = useState();
   const [isOpen, setIsOpen] = useState(false);
+  const [deletedpost, setDeletedPost] = useState();
   const [selectedPost, setSelectedPost] = useState<el | null>(null);
   const myId = user?._id;
 
@@ -66,6 +67,22 @@ export default function Home() {
       AllPost();
     }
   }, []);
+  const DeletePost = async (postId: string) => {
+    const response = await fetch(
+      `http://localhost:8080/delete-post/${postId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      await response.json();
+      AllPost();
+    }
+  };
 
   return (
     <div>
@@ -108,6 +125,8 @@ export default function Home() {
                   isOpen={isOpen}
                   setIsOpen={setIsOpen}
                   selectedPost={selectedPost!}
+                  DeletePost={DeletePost}
+                  postId={post._id}
                 />
               )}
               <Story post={post} />
