@@ -32,17 +32,20 @@ const CommentFunction = () => {
   const postId = params.postId;
   const createComment = async () => {
     setPosted(true);
-    const response = await fetch("https://ig-back-end.onrender.com/comment/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        postId,
-        comments,
-      }),
-    });
+    const response = await fetch(
+      "https://ig-back-end.onrender.com/comment/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          postId,
+          comments,
+        }),
+      }
+    );
     setPosted(false);
   };
   const bringComment = async () => {
@@ -81,7 +84,7 @@ const CommentFunction = () => {
           return (
             <div key={com._id}>
               <div className="flex">
-                <div className="font-bold "> {com.user.userName}</div>
+                <div className="font-bold "> {com?.user?.userName}</div>
                 <div>{com.comments}</div>
               </div>
             </div>
