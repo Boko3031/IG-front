@@ -15,7 +15,7 @@ type user = {
 };
 
 const Page = () => {
-  const { token, user } = useUser();
+  const { token, } = useUser();
   const [searchValue, setSearchValue] = useState("");
   const [users, setUsers] = useState<user[]>([]);
 

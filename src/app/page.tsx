@@ -25,7 +25,6 @@ export default function Home() {
   const [post, setPost] = useState<el[]>([]);
   const [likedPost, setLikedPost] = useState();
   const [isOpen, setIsOpen] = useState(false);
-  const [deletedpost, setDeletedPost] = useState();
   const [selectedPost, setSelectedPost] = useState<el | null>(null);
   const myId = user?._id;
 
